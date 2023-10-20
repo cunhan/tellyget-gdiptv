@@ -1,3 +1,5 @@
+# 适配Guangdong并合并全网段组播地址列表，pip安装的原版TellyGet并不适配GD，如需使用本项目，请直接下载源码。
+
 # TellyGet
 
 A toolset for fetching and updating m3u playlist and xmltv guide from the IPTV network.
