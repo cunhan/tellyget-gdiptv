@@ -1,4 +1,4 @@
-# 适配Guangdong并合并全网段组播地址列表，pip安装的原版TellyGet并不适配GD，如需使用本项目，请直接下载源码。
+# 适配Guangdong并合并全省组播地址列表（包括地级市电视台），pip安装的原版TellyGet并不适配GD，如需使用本项目，请直接下载源码。
 
 # TellyGet
 
