@@ -21,7 +21,7 @@ class Guide:
         channels = []
         filtered_channels = 0
         
-        #从git下载全网段的组播列表，以此为记住，把本地抓取的单播地址补充进去。
+        #从git下载全网段的组播列表，以此为基础，把本地抓取的单播地址补充进去。
         url = 'GuangdongIPTV_rtp_all.m3u'
         parser = M3uParser()
         parser.parse_m3u(url, check_live=False, enforce_schema=True)        
@@ -118,8 +118,13 @@ class Guide:
                 if x in channelname:
                     return (g[0], x)
         return ('其他', channelname)
-                    
+        
     def get_playlist(self, channels):
+        if self.args.output[-3:].upper() == 'TXT':
+            return self.get_playlist_txt(channels)
+        return self.get_playlist_m3u(channels)    
+                    
+    def get_playlist_m3u(self, channels):
         content = '#EXTM3U\n'
         for channel in channels:
             channelname = channel['ChannelName']
