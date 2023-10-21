@@ -26,7 +26,7 @@ setuptools.setup(
     ],
     keywords='set-top-box iptv m3u xmltv',
     python_requires='>=3.6',
-    install_requires=['beautifulsoup4', 'netifaces', 'pycryptodome', 'requests-toolbelt', 'M3uParser'],
+    install_requires=['beautifulsoup4', 'netifaces', 'pycryptodome', 'requests-toolbelt', 'm3u-parser'],
     entry_points={
         'console_scripts': [
             'tellyget=tellyget.tellyget:main',
