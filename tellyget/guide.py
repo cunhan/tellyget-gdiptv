@@ -1,5 +1,7 @@
 import os
 import re
+import codecs
+import requests
 from bs4 import BeautifulSoup
 from m3u_parser import M3uParser
 
@@ -22,7 +24,10 @@ class Guide:
         filtered_channels = 0
         
         #从git下载全网段的组播列表，以此为基础，把本地抓取的单播地址补充进去。
+        resp = requests.get('https://ghfast.top/https://github.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/raw/master/GuangdongIPTV_rtp_all.m3u')
         url = 'GuangdongIPTV_rtp_all.m3u'
+        codecs.open(url, 'w', 'utf-8').write(resp.text)
+        
         parser = M3uParser()
         parser.parse_m3u(url, check_live=False, enforce_schema=True)        
         part2 = parser.get_list()
@@ -127,20 +132,17 @@ class Guide:
     def get_playlist_m3u(self, channels):
         content = '#EXTM3U\n'
         for channel in channels:
-            channelname = channel['ChannelName']
-            content += f"#EXTINF:-1 tvg-name=\"{channel['tvg-name']}\" tvg-id=\"{channel['ChannelID']}\" group-title=\"{channel['Category']}\",{channel['ChannelName']}\n"
+            channelname = channel['ChannelName']            
             urls = channel['ChannelURL'].split('|')
             urls = list(set(urls))
             urls.sort(reverse=True)
-            i = 0
-            while i < len(urls):
-                if 'rtsp' in urls[i]:
-                    urls[i] += "$单播"
+            for u in urls:
+                content += f"#EXTINF:-1 tvg-name=\"{channel['tvg-name']}\" tvg-id=\"{channel['ChannelID']}\" group-title=\"{channel['Category'].replace('IPTV-','')}\",{channel['ChannelName']}\n"
+                if 'rtsp' in u:
+                    u += "$单播"
                 else:
-                    urls[i] += "$组播"
-                i += 1
-            urls = '#'.join(urls)
-            content += f"{urls}\n".replace('rtp://', 'http://192.168.2.1:4022/rtp/')
+                    u += "$组播"
+                content += f"{u}\n".replace('rtp://', 'http://192.168.2.1:4022/rtp/')
         return content
         
     def get_playlist_txt(self, channels):
